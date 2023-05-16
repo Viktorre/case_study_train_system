@@ -167,7 +167,7 @@ def compute_shortest_paths(
     """
 
     # TODO: Write
-
+    pass
 
 # Usage example
 n1, n2, n3, n4 = Node(1), Node(2), Node(3), Node(4)
