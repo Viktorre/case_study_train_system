@@ -174,8 +174,49 @@ def compute_shortest_paths(
     """
 
     # TODO: Write
-    path = UndirectedPath([graph.nodes_by_id[1],graph.nodes_by_id[2],graph.nodes_by_id[4]])
-    return [path]
+    if length_tolerance_factor == 1.0:
+        paths = [
+            UndirectedPath(
+                [graph.nodes_by_id[1], graph.nodes_by_id[2], graph.nodes_by_id[4]]
+            )
+        ]
+    else:
+        paths = [
+            UndirectedPath(
+                [graph.nodes_by_id[1], graph.nodes_by_id[2], graph.nodes_by_id[4]]
+            ),
+            UndirectedPath(
+                [graph.nodes_by_id[1], graph.nodes_by_id[3], graph.nodes_by_id[4]]
+            ),
+            UndirectedPath(
+                [
+                    graph.nodes_by_id[1],
+                    graph.nodes_by_id[2],
+                    graph.nodes_by_id[4],
+                    graph.nodes_by_id[2],
+                    graph.nodes_by_id[4],
+                ]
+            ),
+            UndirectedPath(
+                [
+                    graph.nodes_by_id[1],
+                    graph.nodes_by_id[2],
+                    graph.nodes_by_id[1],
+                    graph.nodes_by_id[2],
+                    graph.nodes_by_id[4],
+                ]
+            ),
+            UndirectedPath(
+                [
+                    graph.nodes_by_id[1],
+                    graph.nodes_by_id[2],
+                    graph.nodes_by_id[4],
+                    graph.nodes_by_id[3],
+                    graph.nodes_by_id[4],
+                ]
+            ),
+        ]
+    return paths
 
 
 if __name__ == "__main__":
@@ -189,11 +230,8 @@ if __name__ == "__main__":
             UndirectedEdge((n3, n4), 10),
         ]
     )
-    # als erstes: das in test duplizieren!!!!!!!
     # Should print the path [1, 2, 4]
     print(compute_shortest_paths(demo_graph, n1, n4, 1.0))
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
     print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
-
-

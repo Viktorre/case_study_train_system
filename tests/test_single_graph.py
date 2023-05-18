@@ -1,5 +1,11 @@
-from typing import Dict
-from main import UndirectedEdge, UndirectedGraph, Node, compute_shortest_paths
+from typing import Dict, List
+from main import (
+    UndirectedEdge,
+    UndirectedGraph,
+    UndirectedPath,
+    Node,
+    compute_shortest_paths,
+)
 
 
 def create_example_data() -> Dict[Node, UndirectedGraph]:
@@ -19,15 +25,54 @@ def create_example_data() -> Dict[Node, UndirectedGraph]:
         ),
     }
 
+
 def test_single_graph_no_tolerance() -> None:
     test_data = create_example_data()
     assert compute_shortest_paths(
         test_data["graph_01"], test_data["node_01"], test_data["node_04"], 1.0
-    ) == [[1, 2, 4]]
+    ) == [
+        UndirectedPath(
+            [test_data["node_01"], test_data["node_02"], test_data["node_04"]]
+        )
+    ]
 
 
 def test_single_graph_with_tolerance() -> None:
     test_data = create_example_data()
     assert compute_shortest_paths(
         test_data["graph_01"], test_data["node_01"], test_data["node_04"], 2.0
-    ) == [[1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]]
+    ) == [
+        UndirectedPath(
+            [test_data["node_01"], test_data["node_02"], test_data["node_04"]]
+        ),
+        UndirectedPath(
+            [test_data["node_01"], test_data["node_03"], test_data["node_04"]]
+        ),
+        UndirectedPath(
+            [
+                test_data["node_01"],
+                test_data["node_02"],
+                test_data["node_04"],
+                test_data["node_02"],
+                test_data["node_04"],
+            ]
+        ),
+        UndirectedPath(
+            [
+                test_data["node_01"],
+                test_data["node_02"],
+                test_data["node_01"],
+                test_data["node_02"],
+                test_data["node_04"],
+            ]
+        ),
+        UndirectedPath(
+            [
+                test_data["node_01"],
+                test_data["node_02"],
+                test_data["node_04"],
+                test_data["node_03"],
+                test_data["node_04"],
+            ]
+        ),
+    ]
