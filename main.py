@@ -176,21 +176,14 @@ def compute_shortest_paths(
     # TODO: Write
     possible_paths = [UndirectedPath([start])]
     arrived_paths = []
-    # while possible_paths:
-    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
-    arrived_paths = identify_and_append_arrived_paths(
-        possible_paths, arrived_paths, end
-    )
-    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
-    arrived_paths = identify_and_append_arrived_paths(
-        possible_paths, arrived_paths, end
-    )
-    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
-    arrived_paths = identify_and_append_arrived_paths(
-        possible_paths, arrived_paths, end
-    )
-
-    # possible_paths = remove_paths_that_are_too_long(possible_paths, arrived_paths)
+    while possible_paths:
+        possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
+        arrived_paths = identify_and_append_arrived_paths(
+            possible_paths, arrived_paths, end
+        )
+        possible_paths, arrived_paths = remove_paths_that_are_too_long(
+            possible_paths, arrived_paths, length_tolerance_factor
+        )
     return arrived_paths
 
 
@@ -209,12 +202,28 @@ def identify_and_append_arrived_paths(
 
 
 def remove_paths_that_are_too_long(
-    possible_paths: List[UndirectedPath], arrived_paths: List[UndirectedPath]
+    possible_paths: List[UndirectedPath],
+    arrived_paths: List[UndirectedPath],
+    length_tolerance_factor: float,
 ) -> List[UndirectedPath]:
-    """If at least one path arrived at the end point of the graph, the function removes all paths from the list of possible path that are at least as long as the shortest arrived path times the tolerance factor."""
+    """If at least one path arrived at the end point of the graph, the function removes all paths from the list of possible path that are longer than the shortest arrived path times the tolerance factor."""
+    updated_possible_paths = []
+    updated_arrived_paths = []
     if arrived_paths:
-        # find shortest arrived path
-        max_distance = None
+        # (maybe use @total_ordering to find fastest path)
+        length_tolerance = (
+            min(arrived_path.length for arrived_path in arrived_paths)
+            * length_tolerance_factor
+        )
+        for path in possible_paths:
+            if path.length <= length_tolerance:
+                updated_possible_paths.append(path)
+        possible_paths = updated_possible_paths
+        for arrived_path in arrived_paths:
+            if arrived_path.length <=length_tolerance:
+                updated_arrived_paths.append(arrived_path)
+        arrived_paths = updated_arrived_paths
+    return possible_paths, arrived_paths
 
 
 def extend_each_path_in_each_direction(
@@ -244,4 +253,12 @@ if __name__ == "__main__":
     print(compute_shortest_paths(demo_graph, n1, n4, 1.0))
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
-    # print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
+    print(len(compute_shortest_paths(demo_graph, n1, n4, 8.0)))
+    
+
+# refactor function, especially too long paths in arrived_paths (als erstes mal trennen)
+# to do: write test where shortest path is found in later step, ie one direct long connection and several shorter. interesting edge case
+
+#test large graph
+#test edge cases#
+# test performance
