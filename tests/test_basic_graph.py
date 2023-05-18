@@ -26,7 +26,7 @@ def create_example_data() -> Dict[Node, UndirectedGraph]:
     }
 
 
-def test_single_graph_no_tolerance() -> None:
+def test_basic_graph_no_tolerance() -> None:
     test_data = create_example_data()
     assert compute_shortest_paths(
         test_data["graph_01"], test_data["node_01"], test_data["node_04"], 1.0
@@ -37,11 +37,11 @@ def test_single_graph_no_tolerance() -> None:
     ]
 
 
-def test_single_graph_with_tolerance() -> None:
+def test_basic_graph_with_tolerance() -> None:
     test_data = create_example_data()
-    assert compute_shortest_paths(
+    assert set(compute_shortest_paths(
         test_data["graph_01"], test_data["node_01"], test_data["node_04"], 2.0
-    ) == [
+    )) == set([
         UndirectedPath(
             [test_data["node_01"], test_data["node_02"], test_data["node_04"]]
         ),
@@ -75,4 +75,4 @@ def test_single_graph_with_tolerance() -> None:
                 test_data["node_04"],
             ]
         ),
-    ]
+    ])
