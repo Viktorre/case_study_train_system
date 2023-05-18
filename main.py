@@ -174,49 +174,59 @@ def compute_shortest_paths(
     """
 
     # TODO: Write
-    if length_tolerance_factor == 1.0:
-        paths = [
-            UndirectedPath(
-                [graph.nodes_by_id[1], graph.nodes_by_id[2], graph.nodes_by_id[4]]
-            )
-        ]
-    else:
-        paths = [
-            UndirectedPath(
-                [graph.nodes_by_id[1], graph.nodes_by_id[2], graph.nodes_by_id[4]]
-            ),
-            UndirectedPath(
-                [graph.nodes_by_id[1], graph.nodes_by_id[3], graph.nodes_by_id[4]]
-            ),
-            UndirectedPath(
-                [
-                    graph.nodes_by_id[1],
-                    graph.nodes_by_id[2],
-                    graph.nodes_by_id[4],
-                    graph.nodes_by_id[2],
-                    graph.nodes_by_id[4],
-                ]
-            ),
-            UndirectedPath(
-                [
-                    graph.nodes_by_id[1],
-                    graph.nodes_by_id[2],
-                    graph.nodes_by_id[1],
-                    graph.nodes_by_id[2],
-                    graph.nodes_by_id[4],
-                ]
-            ),
-            UndirectedPath(
-                [
-                    graph.nodes_by_id[1],
-                    graph.nodes_by_id[2],
-                    graph.nodes_by_id[4],
-                    graph.nodes_by_id[3],
-                    graph.nodes_by_id[4],
-                ]
-            ),
-        ]
-    return paths
+    possible_paths = [UndirectedPath([start])]
+    arrived_paths = []
+    # while possible_paths:
+    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
+    arrived_paths = identify_and_append_arrived_paths(
+        possible_paths, arrived_paths, end
+    )
+    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
+    arrived_paths = identify_and_append_arrived_paths(
+        possible_paths, arrived_paths, end
+    )
+    possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
+    arrived_paths = identify_and_append_arrived_paths(
+        possible_paths, arrived_paths, end
+    )
+
+    # possible_paths = remove_paths_that_are_too_long(possible_paths, arrived_paths)
+    return arrived_paths
+
+
+def identify_and_append_arrived_paths(
+    possible_paths: List[UndirectedPath],
+    arrived_paths: List[UndirectedPath],
+    end: Node,
+) -> List[UndirectedPath]:
+    """
+    checks for all possible paths if their current end point is the end point of the graph. If yes, then these paths are added to the list of arrived paths
+    """
+    for path in possible_paths:
+        if path.end == end:
+            arrived_paths.append(path)
+    return arrived_paths
+
+
+def remove_paths_that_are_too_long(
+    possible_paths: List[UndirectedPath], arrived_paths: List[UndirectedPath]
+) -> List[UndirectedPath]:
+    """If at least one path arrived at the end point of the graph, the function removes all paths from the list of possible path that are at least as long as the shortest arrived path times the tolerance factor."""
+    if arrived_paths:
+        # find shortest arrived path
+        max_distance = None
+
+
+def extend_each_path_in_each_direction(
+    possible_paths: List[UndirectedPath], graph: UndirectedGraph
+) -> List[UndirectedPath]:
+    """for each path it finds all edges that are connected to its end node. Each path is extended by its adjacent nodes. If there are several adjacent nodes, one path is updated into several different graphs, one for each adjacent node."""
+    extended_possible_paths = []
+    for path in possible_paths:
+        for nodes in graph.nodes_by_id.values():
+            if path.end.edge_to(nodes) is not None:
+                extended_possible_paths.append(UndirectedPath([*path.nodes, nodes]))
+    return extended_possible_paths
 
 
 if __name__ == "__main__":
@@ -234,4 +244,4 @@ if __name__ == "__main__":
     print(compute_shortest_paths(demo_graph, n1, n4, 1.0))
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
-    print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
+    # print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
