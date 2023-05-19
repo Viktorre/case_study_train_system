@@ -247,11 +247,3 @@ if __name__ == "__main__":
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
     print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
-
-    print(len(compute_shortest_paths(demo_graph, n1, n4, 9.0)))
-
-# to do: write test where shortest path is found in later step, ie one direct long connection and several shorter. interesting edge case
-
-# test large graph
-# test edge cases#
-# test performance
