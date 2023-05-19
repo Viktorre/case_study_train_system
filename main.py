@@ -149,18 +149,8 @@ class UndirectedPath:
 def compute_shortest_paths(
     graph: UndirectedGraph, start: Node, end: Node, length_tolerance_factor: float
 ) -> List[UndirectedPath]:
-    """Computes and returns the N shortest paths between the given end nodes.
-
-    The discovered paths always contain the shortest path between the two nodes. In addition, the
-    second shortest, third shortest and following paths are also added (in ascending order by path
-    length) up to (excluding) the path whose length is larger than the length of the shortest path
-    multiplied with the given tolerance factor.
-
-    We do not constrain this function to acyclic paths, i.e., cyclic paths should be found as well.
-
-    For a given input of start node A, end node B and a tolerance factor of 2, the result has to
-    contain all paths from A to B whose length is at most twice the length of the shortest path
-    from A to B.
+    """Computes and returns the N shortest paths between the given end nodes. The discovered paths always contain the shortest path between the two nodes. In addition, the second shortest, third shortest and following paths are also added (in ascending order by path length) up to (excluding) the path whose length is larger than the length of the shortest path multiplied with the given tolerance factor. Paths may be cyclic, meaning paths can go back an forth between nodes as in a circle.
+    This function uses an breadth-first search algorithm, which is modified to efficiently handle cyclic paths. Given a start node, the function gradually creates and extends paths in all possible directions incldung cyclic conncections. It saves all paths that successfully reach the end node. The modification is that the function stops extending paths that are too long given the tolerance to increase efficiency. The process of extending paths is repeated until all path reach the length tolerance limit. The result is the list of arrived paths when the process is finished.
 
     Args:
         graph: The undirected graph in which the N shortest paths shall be found.
@@ -170,10 +160,8 @@ def compute_shortest_paths(
             (minimum: 1.0, maximum: infinite)
 
     Returns:
-        The discovered paths. If no path from A to B exists, the result shall be empty.
+        The discovered paths. If no path from A to B exists, the result list is empty.
     """
-
-    # TODO: Write
     possible_paths = [UndirectedPath([start])]
     arrived_paths = []
     while possible_paths:
@@ -181,9 +169,13 @@ def compute_shortest_paths(
         arrived_paths = identify_and_append_arrived_paths(
             possible_paths, arrived_paths, end
         )
-        possible_paths, arrived_paths = remove_paths_that_are_too_long(
-            possible_paths, arrived_paths, length_tolerance_factor
+        length_tolerance = compute_length_tolerance(
+            arrived_paths, length_tolerance_factor
         )
+        possible_paths = remove_paths_that_are_too_long(
+            possible_paths, length_tolerance
+        )
+        arrived_paths = remove_paths_that_are_too_long(arrived_paths, length_tolerance)
     return arrived_paths
 
 
@@ -202,28 +194,29 @@ def identify_and_append_arrived_paths(
 
 
 def remove_paths_that_are_too_long(
-    possible_paths: List[UndirectedPath],
-    arrived_paths: List[UndirectedPath],
-    length_tolerance_factor: float,
-) -> List[UndirectedPath]:
-    """If at least one path arrived at the end point of the graph, the function removes all paths from the list of possible path that are longer than the shortest arrived path times the tolerance factor."""
-    updated_possible_paths = []
-    updated_arrived_paths = []
+    paths: List[UndirectedPath],
+    length_tolerance: float,
+) -> UndirectedPath:
+    """If at least one path arrived at the end point of the graph, the function removes all paths from the list of given paths that are longer than the shortest arrived path times the tolerance factor."""
+    updated_paths = []
+    if length_tolerance:
+        for path in paths:
+            if path.length <= length_tolerance:
+                updated_paths.append(path)
+        paths = updated_paths
+    return paths
+
+
+def compute_length_tolerance(
+    arrived_paths: List[UndirectedPath], length_tolerance_factor: float
+) -> float:
+    """If at least on path arrived at the end node, ie the list of arrived path is not empty, the length tolerance is computed by multiplying the shortest arrived path length with the tolerance factor."""
     if arrived_paths:
-        # (maybe use @total_ordering to find fastest path)
         length_tolerance = (
             min(arrived_path.length for arrived_path in arrived_paths)
             * length_tolerance_factor
         )
-        for path in possible_paths:
-            if path.length <= length_tolerance:
-                updated_possible_paths.append(path)
-        possible_paths = updated_possible_paths
-        for arrived_path in arrived_paths:
-            if arrived_path.length <=length_tolerance:
-                updated_arrived_paths.append(arrived_path)
-        arrived_paths = updated_arrived_paths
-    return possible_paths, arrived_paths
+        return length_tolerance
 
 
 def extend_each_path_in_each_direction(
@@ -253,12 +246,12 @@ if __name__ == "__main__":
     print(compute_shortest_paths(demo_graph, n1, n4, 1.0))
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
-    print(len(compute_shortest_paths(demo_graph, n1, n4, 8.0)))
-    
+    print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
 
-# refactor function, especially too long paths in arrived_paths (als erstes mal trennen)
+    print(len(compute_shortest_paths(demo_graph, n1, n4, 9.0)))
+
 # to do: write test where shortest path is found in later step, ie one direct long connection and several shorter. interesting edge case
 
-#test large graph
-#test edge cases#
+# test large graph
+# test edge cases#
 # test performance
