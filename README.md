@@ -63,7 +63,7 @@ For more details on the functionality and usage of each class and function, plea
 
 The project includes a `tests` directory containing test files to verify the correctness of the implementation. The tests cover a standard graph, a large graph, and edge cases.
 
-To run the tests, execute the corresponding test files using the testing framework `pytest`.
+To run the tests, execute the corresponding test files using the testing framework `pytest` via shell command.
 
 ```bash
 pytest tests/
