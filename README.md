@@ -28,7 +28,7 @@ To use the project, follow these steps:
 3. Run the respective tests in the `tests/` directory.
 
 
-Here's an example usage:
+Here's an usage example:
 
 ```python
 from main import UndirectedGraph, Node, compute_shortest_paths
@@ -57,7 +57,7 @@ The `compute_shortest_paths` function is the main entry point for discovering sh
 
 The other classes (`Node`, `UndirectedEdge`, `UndirectedGraph`, `UndirectedPath`) provide the necessary data structures and operations for representing and working with the graph.
 
-For more details on the functionality and usage of each class and function, please refer to the code comments in `main.py`.
+For more details on the functionality and usage of each class and function, please refer to the docstrings in the code in `main.py`.
 
 ## Testing
 
