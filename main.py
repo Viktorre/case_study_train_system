@@ -150,7 +150,7 @@ def compute_shortest_paths(
     graph: UndirectedGraph, start: Node, end: Node, length_tolerance_factor: float
 ) -> List[UndirectedPath]:
     """Computes and returns the N shortest paths between the given end nodes. The discovered paths always contain the shortest path between the two nodes. In addition, the second shortest, third shortest and following paths are also added (in ascending order by path length) up to (excluding) the path whose length is larger than the length of the shortest path multiplied with the given tolerance factor. Paths may be cyclic, meaning paths can go back an forth between nodes as in a circle.
-    This function uses an breadth-first search algorithm, which is modified to efficiently handle cyclic paths. Given a start node, the function gradually creates and extends paths in all possible directions incldung cyclic conncections. It saves all paths that successfully reach the end node. The modification is that the function stops extending paths that are too long given the tolerance to increase efficiency. The process of extending paths is repeated until all path reach the length tolerance limit. The result is the list of arrived paths when the process is finished.
+    This function uses an breadth-first search algorithm, which is modified to efficiently handle cyclic paths. Given a start node, the function gradually creates and extends paths in all possible directions incldung cyclic conncections. It saves all paths that successfully reach the end node. The modification is that the function stops extending paths that are too long given the tolerance to increase efficiency. The process of extending paths is repeated until all path reach the length tolerance limit. When the process is finished, the result is the list of arrived paths - ordered by length - which will be returned.
 
     Args:
         graph: The undirected graph in which the N shortest paths shall be found.
@@ -172,7 +172,8 @@ def compute_shortest_paths(
         )
         paths = remove_paths_that_are_too_long(paths, length_tolerance)
         arrived_paths = remove_paths_that_are_too_long(arrived_paths, length_tolerance)
-    return arrived_paths
+        
+    return sorted(arrived_paths, key=lambda path: path.length, reverse=False)
 
 
 def identify_and_append_arrived_paths(
