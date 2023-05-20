@@ -24,7 +24,7 @@ def test_basic_graph_no_tolerance() -> None:
 
 def test_basic_graph_with_tolerance() -> None:
     """
-    Test function to check the shortest path computation on a basic graph without tolerance. The function creates an example graph and computes the shortest paths given a tolerance of 2.0. It asserts that the computed paths match the expected paths.
+    Test function to check the shortest path computation on a basic graph without tolerance. The function creates an example graph and computes the shortest paths given a tolerance of 2.0. It asserts that the computed paths match the expected paths. 
     """
     nodes = 4
     node_connections = [((1, 2), 10),((1, 3), 30),((2, 4), 10),((3, 4), 10)]
