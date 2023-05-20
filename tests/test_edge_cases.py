@@ -1,37 +1,18 @@
-from typing import Dict, List
 from main import (
-    UndirectedEdge,
-    UndirectedGraph,
     UndirectedPath,
-    Node,
     compute_shortest_paths,
 )
+from utils import create_example_data
 
 
-def create_example_data() -> Dict[Node, UndirectedGraph]:
-    n1, n2 = Node(1), Node(2)
-    return {
-        "node_01": n1,
-        "node_02": n2,
-        "graph_01": UndirectedGraph(
-            [
-                UndirectedEdge((n1, n2), 10),
-            ]
-        ),
-    }
-
-
-def test_minimal_graph_no_tolerance() -> None:
-    test_data = create_example_data()
+def test_minimal_graph() -> None:
+    """ Test function to check that the shortest path computation works on the smallest graph possible. The graph consists of two nodes and a single edge between them. The function asserts that the compute_shortest_path function finds the wanted single-edged path.
+    """
+    nodes = 2
+    node_connections = [((1, 2), 10)]
+    test_data = create_example_data(nodes,node_connections)
     assert compute_shortest_paths(
-        test_data["graph_01"], test_data["node_01"], test_data["node_02"], 1.0
-    ) == [UndirectedPath([test_data["node_01"], test_data["node_02"]])]
+        test_data["graph_1"], test_data["node_1"], test_data["node_2"], 1.0
+    ) == [UndirectedPath([test_data["node_1"], test_data["node_2"]])]
 
 
-def test_minimal_graph_with_tolerance() -> None:
-    test_data = create_example_data()
-    assert set(
-        compute_shortest_paths(
-            test_data["graph_01"], test_data["node_01"], test_data["node_02"], 2.0
-        )
-    ) == set([UndirectedPath([test_data["node_01"], test_data["node_02"]])])

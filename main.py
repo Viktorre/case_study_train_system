@@ -19,6 +19,7 @@ lists them with their precise versions ("packageA==1.2.3").
 from functools import total_ordering
 from typing import Any, List, Optional, List, Tuple, cast
 
+
 class Node:
     """A node in a graph."""
 
@@ -144,6 +145,7 @@ class UndirectedPath:
         nodestr: str = ", ".join([node.__repr__() for node in self.nodes])
         return f"UndirectedPath([{nodestr}])"
 
+
 def compute_shortest_paths(
     graph: UndirectedGraph, start: Node, end: Node, length_tolerance_factor: float
 ) -> List[UndirectedPath]:
@@ -160,32 +162,28 @@ def compute_shortest_paths(
     Returns:
         The discovered paths. If no path from A to B exists, the result list is empty.
     """
-    possible_paths = [UndirectedPath([start])]
+    paths = [UndirectedPath([start])]
     arrived_paths = []
-    while possible_paths:
-        possible_paths = extend_each_path_in_each_direction(possible_paths, graph)
-        arrived_paths = identify_and_append_arrived_paths(
-            possible_paths, arrived_paths, end
-        )
+    while paths:
+        paths = extend_each_path_in_each_direction(paths, graph)
+        arrived_paths = identify_and_append_arrived_paths(paths, arrived_paths, end)
         length_tolerance = compute_length_tolerance(
             arrived_paths, length_tolerance_factor
         )
-        possible_paths = remove_paths_that_are_too_long(
-            possible_paths, length_tolerance
-        )
+        paths = remove_paths_that_are_too_long(paths, length_tolerance)
         arrived_paths = remove_paths_that_are_too_long(arrived_paths, length_tolerance)
     return arrived_paths
 
 
 def identify_and_append_arrived_paths(
-    possible_paths: List[UndirectedPath],
+    paths: List[UndirectedPath],
     arrived_paths: List[UndirectedPath],
     end: Node,
 ) -> List[UndirectedPath]:
     """
     checks for all possible paths if their current end point is the end point of the graph. If yes, then these paths are added to the list of arrived paths
     """
-    for path in possible_paths:
+    for path in paths:
         if path.end == end:
             arrived_paths.append(path)
     return arrived_paths
@@ -216,17 +214,17 @@ def compute_length_tolerance(
         )
         return length_tolerance
 
+
 def extend_each_path_in_each_direction(
-    possible_paths: List[UndirectedPath], graph: UndirectedGraph
+    paths: List[UndirectedPath], graph: UndirectedGraph
 ) -> List[UndirectedPath]:
     """for each path it finds all edges that are connected to its end node. Each path is extended by its adjacent nodes. If there are several adjacent nodes, one path is updated into several different graphs, one for each adjacent node."""
-    extended_possible_paths = []
-    for path in possible_paths:
+    extended_paths = []
+    for path in paths:
         for nodes in graph.nodes_by_id.values():
             if path.end.edge_to(nodes) is not None:
-                extended_possible_paths.append(UndirectedPath([*path.nodes, nodes]))
-    return extended_possible_paths
-
+                extended_paths.append(UndirectedPath([*path.nodes, nodes]))
+    return extended_paths
 
 
 if __name__ == "__main__":
@@ -245,8 +243,5 @@ if __name__ == "__main__":
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
     print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
-    
-    
+
     # print(len(compute_shortest_paths(demo_graph, n1, n4, 9.0)))
-    
-    

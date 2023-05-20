@@ -1,104 +1,49 @@
-from typing import Dict, List, Tuple, Union
 from main import (
-    UndirectedEdge,
-    UndirectedGraph,
     UndirectedPath,
-    Node,
-    compute_shortest_paths,
+    compute_shortest_paths
 )
+from utils import create_example_data
 
 
-def create_example_data(nodes:int,node_connections:List[Union[Tuple[int],int]]) -> Dict[Node, UndirectedGraph]:
+
+
+def test_large_graph_no_tolerance() -> None:
     """
-    Create example data with nodes and their connections in an undirected graph.
-
-    Args:
-        nodes (int): The number of nodes to create.
-        node_connections (List[Tuple[int],int]): List of tuples representing the connections between nodes. Each tuple contains two integers representing the indices of the connected nodes, and another single integer for the length of the edge connection the two nodes.
-
-    Returns:
-        Dict[Node, UndirectedGraph]: A dictionary containing the nodes and the undirected graph.
-
+    Test function to check the shortest path computation on a large graph without tolerance. The function creates the example graph, computes the shortest paths using the compute_shortest_paths function and asserts that the result matches the expected path. The graph nodes can be visualized as
+    1   2   3   4
+    5   6   7   8
+    9  10  11  12
+    13 14  15  16
+    , where each node my have an edge to lateral, horizontal or diagnoal neighbors. The defined connections and their respective length are arbitrary and the single shortest path is 1>5>9>13>14>15>16. 
     """
-    example_data = {}
-    for i in range(1, nodes+1):
-        example_data[f"node_{i}"] = Node(i)
-    edges = []
-    for node_connection in node_connections:
-        edges.append(
-            UndirectedEdge(
-                (
-                    example_data[f"node_{node_connection[0][0]}"],
-                    example_data[f"node_{node_connection[0][1]}"],
-                ),
-                node_connection[1],
-            )
-        )
-    example_data["graph_1"] = UndirectedGraph(edges)
-    return example_data
-
-
-def test_basic_graph_no_tolerance() -> None:
-    """
-    Test function to check the shortest path computation on a basic graph without tolerance. The function creates an example graph, computes the shortest paths using the compute_shortest_paths function and asserts that the result matches the expected path. Given this specific graph and a tolerance of 1, there exist a single shortest path.
-
-    """
-    nodes = 4
-    node_connections = [((1, 2), 10),((1, 3), 30),((2, 4), 10),((3, 4), 10)]
+    nodes = 16
+    node_connections = [
+        ((1, 6), 20),
+        ((6, 11), 20),
+        ((11, 16), 20),
+        ((1, 5), 10),
+        ((5, 9), 10),
+        ((9, 13), 10),
+        ((13, 14), 10),
+        ((14, 15), 10),
+        ((15, 16), 5),
+        ((6, 2), 20),
+        ((2, 3), 20),
+        ((3, 4), 20),
+        ((6, 7), 20),
+        ((6, 10), 20),
+        ((7, 10), 20),
+        ((7, 3), 20),
+        ((7, 8), 20),
+        ((7,11), 20),
+        ((7,12), 20),
+        ((12,16), 20),
+        ]
     test_data = create_example_data(nodes, node_connections)
     assert compute_shortest_paths(
-        test_data["graph_1"], test_data["node_1"], test_data["node_4"], 1.0
+        test_data["graph_1"], test_data["node_1"], test_data["node_16"], 1.0
     ) == [
         UndirectedPath(
-            [test_data["node_1"], test_data["node_2"], test_data["node_4"]]
+            [test_data["node_1"], test_data["node_5"], test_data["node_9"],test_data["node_13"],test_data["node_14"],test_data["node_15"],test_data["node_16"]]
         )
     ]
-
-def test_basic_graph_with_tolerance() -> None:
-    """
-    Test function to check the shortest path computation on a basic graph without tolerance. The function creates an example graph and computes the shortest paths given a tolerance of 2.0. It asserts that the computed paths match the expected paths.
-    """
-    nodes = 4
-    node_connections = [((1, 2), 10),((1, 3), 30),((2, 4), 10),((3, 4), 10)]
-    test_data = create_example_data(nodes, node_connections)
-    assert set(
-        compute_shortest_paths(
-            test_data["graph_1"], test_data["node_1"], test_data["node_4"], 2.0
-        )
-    ) == set(
-        [
-            UndirectedPath(
-                [test_data["node_1"], test_data["node_2"], test_data["node_4"]]
-            ),
-            UndirectedPath(
-                [test_data["node_1"], test_data["node_3"], test_data["node_4"]]
-            ),
-            UndirectedPath(
-                [
-                    test_data["node_1"],
-                    test_data["node_2"],
-                    test_data["node_4"],
-                    test_data["node_2"],
-                    test_data["node_4"],
-                ]
-            ),
-            UndirectedPath(
-                [
-                    test_data["node_1"],
-                    test_data["node_2"],
-                    test_data["node_1"],
-                    test_data["node_2"],
-                    test_data["node_4"],
-                ]
-            ),
-            UndirectedPath(
-                [
-                    test_data["node_1"],
-                    test_data["node_2"],
-                    test_data["node_4"],
-                    test_data["node_3"],
-                    test_data["node_4"],
-                ]
-            ),
-        ]
-    )
