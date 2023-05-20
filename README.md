@@ -1,24 +1,84 @@
-# case_study_db_systel
+# Graph Path Discovery
+
+This project is focused on implementing a function to discover shortest paths in an undirected weighted graph with strictly positive edge lengths. The main functionality is provided in the `main.py` file, along with some supporting classes and functions.
+
+## Project Structure
+
+The project has the following structure:
+
+```
+├── main.py
+├── requirements.txt
+├── tests
+│   ├── test_basic_graph.py
+│   ├── test_large_graph.py
+│   └── test_edge_cases.py
+```
+
+- `main.py`: Contains the main implementation code for discovering shortest paths in the graph.
+- `requirements.txt`: Specifies the dependencies required for running the project.
+- `tests`: A directory containing test files to verify the correctness of the implementation.
+
+## Usage
+
+To use the project, follow these steps:
+
+1. Make sure you have the necessary dependencies installed. You can install them using the command `pip install -r requirements.txt`.
+2. Run `main.py`.
+3. Run the respective tests in the `tests/` directory.
 
 
-## Der optimale Weg
+Here's an usage example:
 
-Viele Optimierungsaufgaben bei der Deutschen Bahn beschäftigen sich damit, Wege durch ein komplexes Netzwerk aus Schienen und Weichen zu finden. Je nach Anforderung den schnellsten, kürzesten, besten oder preiswertesten Weg. Besonders spannend wird es dann, wenn sich viele Züge gleichzeitig die Strecke teilen sollen.
+```python
+from main import UndirectedGraph, Node, compute_shortest_paths
 
-Für die Berechnung und Optimierung wird das Schienen-Netz in einen Graphen konvertiert in dem Kanten die Gleise darstellen und Weichen die Knoten.
+# Create the nodes and edges of the graph
+n1, n2, n3, n4 = Node(1), Node(2), Node(3), Node(4)
+demo_graph = UndirectedGraph([
+    UndirectedEdge((n1, n2), 10),
+    UndirectedEdge((n1, n3), 30),
+    UndirectedEdge((n2, n4), 10),
+    UndirectedEdge((n3, n4), 10),
+])
 
-## Aufgabenstellung
+# Find the shortest paths from n1 to n4 with a length tolerance factor of 1.0
+shortest_paths = compute_shortest_paths(demo_graph, n1, n4, 1.0)
+print(shortest_paths)  # Should print the path [1, 2, 4]
 
-In der beiliegenden Python Datei ist ein solcher Graph implementiert.
+# Find the shortest paths from n1 to n4 with a length tolerance factor of 2.0
+shortest_paths = compute_shortest_paths(demo_graph, n1, n4, 2.0)
+print(shortest_paths)  # Should print multiple paths
+```
 
-Deine Aufgabe ist es die Funktion „compute_shortest_paths“ zu implementieren die einige kürzeste Pfade herausfinden soll. 
+## Implementation Details
 
-Bitte verwende bei deiner Implementierung die gleichen Qualitätsstandards, wie für produktiven Code im Live-System. Deine Implementierung sollte mind. Python 3.9 benutzen und keine Abhängigkeiten haben mit Ausnahme der Python-Standardbibliothek. Weitere Hinweise und Details zur Aufgabenstellung findest du in den Kommentaren im Code. 
+The `compute_shortest_paths` function is the main entry point for discovering shortest paths in the graph. It uses a modified breadth-first search algorithm to efficiently handle cyclic paths. The function gradually creates and extends paths in all possible directions, saving the paths that successfully reach the end node. The extension of paths is stopped for paths that exceed the length tolerance limit, increasing efficiency.
 
-Funktionale Korrektheit ist das wichtigste Bewertungs-Kriterium. Weitere Kriterien sind Lesbarkeit, Wartbarkeit und Laufzeit für große Graphen (in absteigender Reihenfolge).
+The other classes (`Node`, `UndirectedEdge`, `UndirectedGraph`, `UndirectedPath`) provide the necessary data structures and operations for representing and working with the graph.
 
-Der Graph aus der Aufgabenstellung ist recht einfach. Vielleicht möchtest du dir einen größeren Graphen ausdenken und die Brillanz deiner Lösung daran beweisen.
+For more details on the functionality and usage of each class and function, please refer to the docstrings in the code in `main.py`.
 
-Bitte reiche alles ein, was du geschrieben hast (als Zip Datei), einschließlich Dokumentation und ggf. eigener Tests.
+## Testing
 
-Bitte erläutere mit der Abgabe der Aufgabe deshalb auch, welche Schwächen dein Ergebnis hat und was du noch tun könntest, um eine aus deiner Sicht perfekte Lösung zu erreichen.
+The project includes a `tests` directory containing test files to verify the correctness of the implementation. The tests cover a standard graph, a large graph, and edge cases.
+
+To run the tests, execute the corresponding test files using the testing framework `pytest` via shell command.
+
+```bash
+pytest tests/
+```
+
+Make sure to have the necessary testing dependencies installed before running the tests.
+
+## Dependencies
+
+The project has dependencies specified in the `requirements.txt` file. You can install them using the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+Please note that the project was developed and tested using Python 3.9. It may not be compatible with older versions of Python.
+
+This project was developed and is owned by Viktor Reif. If you have suggestions or inquiries, contact viktor.reif@gmail.com

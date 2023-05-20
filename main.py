@@ -19,7 +19,6 @@ lists them with their precise versions ("packageA==1.2.3").
 from functools import total_ordering
 from typing import Any, List, Optional, List, Tuple, cast
 
-
 class Node:
     """A node in a graph."""
 
@@ -145,7 +144,6 @@ class UndirectedPath:
         nodestr: str = ", ".join([node.__repr__() for node in self.nodes])
         return f"UndirectedPath([{nodestr}])"
 
-
 def compute_shortest_paths(
     graph: UndirectedGraph, start: Node, end: Node, length_tolerance_factor: float
 ) -> List[UndirectedPath]:
@@ -218,7 +216,6 @@ def compute_length_tolerance(
         )
         return length_tolerance
 
-
 def extend_each_path_in_each_direction(
     possible_paths: List[UndirectedPath], graph: UndirectedGraph
 ) -> List[UndirectedPath]:
@@ -229,6 +226,7 @@ def extend_each_path_in_each_direction(
             if path.end.edge_to(nodes) is not None:
                 extended_possible_paths.append(UndirectedPath([*path.nodes, nodes]))
     return extended_possible_paths
+
 
 
 if __name__ == "__main__":
@@ -247,3 +245,8 @@ if __name__ == "__main__":
 
     # Should print the paths [1, 2, 4], [1, 3, 4], [1, 2, 4, 2, 4], [1, 2, 1, 2, 4], [1, 2, 4, 3, 4]
     print(compute_shortest_paths(demo_graph, n1, n4, 2.0))
+    
+    
+    # print(len(compute_shortest_paths(demo_graph, n1, n4, 9.0)))
+    
+    
