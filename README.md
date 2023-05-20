@@ -17,8 +17,8 @@ The project has the following structure:
 │   └── test_edge_cases.py
 ```
 
-- `main.py`: Contains the main implementation code for discovering shortest paths in the graph.
-- `utils.py`: Contains the supporting classes and functions needed for the main implentation and testing
+- `main.py`: Contains the main implementation code for discovering shortest paths in a given graph.
+- `utils.py`: Contains the supporting classes and functions needed for the main implentation and testing.
 - `requirements.txt`: Specifies the dependencies required for running the project.
 - `tests`: A directory containing test files to verify the correctness of the implementation.
 
@@ -57,7 +57,7 @@ print(shortest_paths)  # Should print multiple paths
 
 ## Implementation Details
 
-The `compute_shortest_paths` function is the main entry point for discovering shortest paths in the graph. It uses a modified breadth-first search algorithm to efficiently handle cyclic paths. The function gradually creates and extends paths in all possible directions, saving the paths that successfully reach the end node. The extension of paths is stopped for paths that exceed the length tolerance limit, increasing efficiency. For higher readability the crucial steps withing the function is split up into smaller sub-functions.
+The `compute_shortest_paths` function is the main entry point for discovering shortest paths in a graph. It uses a modified breadth-first search algorithm to efficiently handle cyclic paths. The function gradually creates and extends paths in all possible directions, saving the paths that successfully reach the end node. The extension of paths is stopped for paths that exceed the length tolerance limit, which increases efficiency. For higher readability the crucial steps withing the function are split up into smaller sub-functions.
 
 The other classes (`Node`, `UndirectedEdge`, `UndirectedGraph`, `UndirectedPath`) provide the necessary data structures and operations for representing and working with the graph.
 
