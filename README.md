@@ -85,4 +85,6 @@ pip install -r requirements.txt
 
 Please note that the project was developed and tested using Python 3.9. It may not be compatible with older versions of Python.
 
-This project was developed and is owned by Viktor Reif. If you have suggestions or inquiries, contact viktor.reif@gmail.com
+## Contact
+
+This project was developed by Viktor Reif. If you have suggestions or inquiries, contact viktor.reif@gmail.com
