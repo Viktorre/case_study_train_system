@@ -1,6 +1,6 @@
 # Graph Path Discovery
 
-This project is focused on implementing a function to discover shortest paths in an undirected weighted graph with strictly positive edge lengths. The main functionality is provided in the `main.py` file, along with some supporting classes and functions found in `utils.py`.
+This project is focused on implementing a function to discover shortest paths in an undirected weighted graph. The main functionality is provided in the `main.py` file, along with some supporting classes and functions found in `utils.py`.
 
 ## Project Structure
 

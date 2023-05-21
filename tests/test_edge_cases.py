@@ -26,9 +26,10 @@ def test_distorted_graph() -> None:
         ((4, 5), 10),
     ]
     test_data = create_example_data(nodes, node_connections)
-    assert compute_shortest_paths(
+    computed_paths = compute_shortest_paths(
         test_data["graph_1"], test_data["node_1"], test_data["node_5"], 1.0
-    ) == [
+    )
+    expected_paths = [
         UndirectedPath(
             [
                 test_data["node_1"],
@@ -39,6 +40,7 @@ def test_distorted_graph() -> None:
             ]
         )
     ]
+    assert computed_paths == expected_paths
 
 
 def test_two_equally_long_paths_at_tolerance_one() -> None:
@@ -51,21 +53,23 @@ def test_two_equally_long_paths_at_tolerance_one() -> None:
         ((3, 4), 10),
     ]
     test_data = create_example_data(nodes, node_connections)
-    assert set(compute_shortest_paths(
-        test_data["graph_1"], test_data["node_1"], test_data["node_4"], 1.0
-    )) == set([
-        UndirectedPath(
-            [
-                test_data["node_1"],
-                test_data["node_2"],
-                test_data["node_4"],
-            ]
-        ),
-        UndirectedPath(
-            [
-                test_data["node_1"],
-                test_data["node_3"],
-                test_data["node_4"],
-            ]
+    computed_paths =  compute_shortest_paths(
+            test_data["graph_1"], test_data["node_1"], test_data["node_4"], 1.0
         )
-    ])
+    expected_paths = [
+            UndirectedPath(
+                [
+                    test_data["node_1"],
+                    test_data["node_2"],
+                    test_data["node_4"],
+                ]
+            ),
+            UndirectedPath(
+                [
+                    test_data["node_1"],
+                    test_data["node_3"],
+                    test_data["node_4"],
+                ]
+            ),
+        ]
+    assert set(computed_paths) == set(expected_paths)
