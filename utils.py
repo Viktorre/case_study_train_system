@@ -1,5 +1,13 @@
+"""
+Utility functions and classes for working with graphs and paths.
+
+Includes classes for Node, UndirectedEdge, UndirectedGraph, and UndirectedPath,
+as well as a function create_example_data to generate example data with nodes
+and their connections in an undirected graph.
+"""
+
 from functools import total_ordering
-from typing import Any, List, Optional, Tuple, Union, List, Dict, cast
+from typing import Any, List, Optional, Tuple, Union, Dict, cast
 
 
 class Node:
@@ -127,20 +135,27 @@ class UndirectedPath:
         nodestr: str = ", ".join([node.__repr__() for node in self.nodes])
         return f"UndirectedPath([{nodestr}])"
 
-def create_example_data(nodes:int,node_connections:List[Union[Tuple[int],int]]) -> Dict[Node, UndirectedGraph]:
+
+def create_example_data(
+    nodes: int, node_connections: List[Union[Tuple[int], int]]
+) -> Dict[Node, UndirectedGraph]:
     """
     Create example data with nodes and their connections in an undirected graph.
 
     Args:
         nodes (int): The number of nodes to create.
-        node_connections (List[Tuple[int],int]): List of tuples representing the connections between nodes. Each tuple contains two integers representing the indices of the connected nodes, and another single integer for the length of the edge connection the two nodes.
+        node_connections (List[Tuple[int], int]): List of tuples representing the
+            connections between nodes. Each tuple contains two integers
+            representing the indices of the connected nodes, and another single
+            integer for the length of the edge connection the two nodes.
 
     Returns:
-        Dict[Node, UndirectedGraph]: A dictionary containing the nodes and the undirected graph.
-
+        Dict[Node, UndirectedGraph]: A dictionary containing the nodes and the
+            undirected graph.
     """
+
     example_data = {}
-    for i in range(1, nodes+1):
+    for i in range(1, nodes + 1):
         example_data[f"node_{i}"] = Node(i)
     edges = []
     for node_connection in node_connections:
