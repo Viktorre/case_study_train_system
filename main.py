@@ -2,8 +2,8 @@
 This script computes and returns the N shortest paths between two given end nodes
 in an undirected graph. The paths are determined based on a length tolerance factor,
 which allows paths up to a certain length ratio compared to the shortest path. The
-algorithm used is a modified breadth-first search that handles cyclic paths efficiently.
-The script provides an example usage with a demo graph.
+program uses a modified breadth-first search algorithm, which handles cyclic paths 
+efficiently. The script provides an example usage with a demo graph.
 """
 from typing import List
 
@@ -45,6 +45,9 @@ def compute_shortest_paths(
         The discovered paths. If no path from A to B exists, the result list is
         empty.
     """
+    if length_tolerance_factor < 1.0:
+        raise ValueError("length_tolerance_factor must be greater than or equal to 1.0.")
+
     paths = [UndirectedPath([start])]
     arrived_paths = []
     while paths:
@@ -68,7 +71,16 @@ def identify_and_append_arrived_paths(
 ) -> List[UndirectedPath]:
     """
     checks for all possible paths if their current end point is the end point of
-    the graph. If yes, then these paths are added to the list of arrived paths
+    the graph. If yes, then these paths are added to the list of arrived paths.
+    Args:
+        paths: A list of UndirectedPath objects representing the current paths.
+        arrived_paths: A list of UndirectedPath objects representing the paths that
+            have already arrived at the end node.
+        end: The end node to compare against the end points of the paths.
+
+    Returns:
+        A list of UndirectedPath objects containing the former arrived paths as well
+        as the added updated arrived paths.
     """
     new_arrived_paths = [path for path in paths if path.end == end]
     arrived_paths.extend(new_arrived_paths)
@@ -81,7 +93,18 @@ def remove_too_long_paths(
 ) -> List[UndirectedPath]:
     """If at least one path arrived at the end point of the graph, the function
     removes all paths from the list of given paths that are longer than the
-    shortest arrived path times the tolerance factor."""
+    shortest arrived path times the tolerance factor.
+    
+    Args:
+        paths: A list of UndirectedPath objects representing the paths to be
+            evaluated and potentially removed.
+        length_tolerance: A float value representing the maximum allowed length
+            ratio compared to the shortest arrived path length.
+
+    Returns:
+        A list of UndirectedPath objects containing the updated paths with any
+        paths longer than the length tolerance removed.
+    """
     updated_paths = [path for path in paths if path.length <= length_tolerance]
     return updated_paths
 
@@ -91,7 +114,18 @@ def compute_length_tolerance(
 ) -> float:
     """If at least on path arrived at the end node, ie the list of arrived path
     is not empty, the length tolerance is computed by multiplying the shortest
-    arrived path length with the tolerance factor."""
+    arrived path length with the tolerance factor.    
+    Args:
+        arrived_paths: A list of UndirectedPath objects representing the paths that
+            have successfully arrived at the end node.
+        length_tolerance_factor: A float value representing the tolerance factor to
+            be applied to the shortest arrived path length.
+
+    Returns:
+        A float value representing the computed length tolerance. It is determined
+        by multiplying the length of the shortest arrived path by the length tolerance
+        factor.
+    """
     length_tolerance = (
         min(arrived_path.length for arrived_path in arrived_paths)
         * length_tolerance_factor
