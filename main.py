@@ -56,9 +56,7 @@ def compute_shortest_paths(
                 arrived_paths, length_tolerance_factor
             )
             paths = remove_too_long_paths(paths, length_tolerance)
-            arrived_paths = remove_too_long_paths(
-                arrived_paths, length_tolerance
-            )
+            arrived_paths = remove_too_long_paths(arrived_paths, length_tolerance)
 
     return sorted(arrived_paths, key=lambda path: path.length, reverse=False)
 
@@ -104,14 +102,23 @@ def compute_length_tolerance(
 def extend_each_path_in_each_direction(
     paths: List[UndirectedPath], graph: UndirectedGraph
 ) -> List[UndirectedPath]:
-    """For each path the function finds all edges that are connected to its end node.
+    """For each path, the function finds all edges that are connected to its end node.
     Each path is extended by its adjacent nodes. If there are several adjacent nodes,
-    one path is updated into several different graphs, one for each adjacent node."""
+    one path is updated into several different graphs, one for each adjacent node.
+    This function uses a complex list comprehension to generate the extended paths.
+    Its logic can be described as:
     extended_paths = []
     for path in paths:
         for nodes in graph.nodes_by_id.values():
             if path.end.edge_to(nodes) is not None:
                 extended_paths.append(UndirectedPath([*path.nodes, nodes]))
+    """
+    extended_paths = [
+        UndirectedPath([*path.nodes, nodes])
+        for path in paths
+        for nodes in graph.nodes_by_id.values()
+        if path.end.edge_to(nodes) is not None
+    ]
     return extended_paths
 
 

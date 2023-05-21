@@ -9,6 +9,7 @@ The project has the following structure:
 ```
 ├── main.py
 ├── utils.py
+├── requirements.txt
 ├── tests
 │   ├── test_ascending_order_of_paths.py
 │   ├── test_basic_graph.py
@@ -17,15 +18,17 @@ The project has the following structure:
 ```
 
 - `main.py`: Contains the main implementation code for discovering shortest paths in a given graph.
-- `utils.py`: Contains the supporting classes and functions needed for the main implementation and testing.
+- `utils.py`: Contains the supporting classes and functions needed for the main implentation and testing.
+- `requirements.txt`: Specifies the dependencies required for running the project.
 - `tests`: A directory containing test files to verify the correctness of the implementation.
 
 ## Usage
 
 To use the project, follow these steps:
 
-1. Run `main.py`.
-2. Run the respective tests in the `tests/` directory.
+1. Make sure you have the necessary dependencies installed. You can install them using the command `pip install -r requirements.txt`.
+2. Run `main.py`.
+3. Run the respective tests in the `tests/` directory.
 
 
 Here's an usage example:
@@ -64,10 +67,22 @@ For more details on the functionality and usage of each class and function, plea
 
 The project includes a `tests` directory containing test files to verify the correctness of the implementation. The tests cover a standard graph, a large graph, and edge cases.
 
+To run the tests, execute the corresponding test files using the testing framework `pytest` via shell command.
+
+```bash
+pytest tests/
+```
+
+Make sure to have the necessary testing dependencies installed before running the tests.
+
 ## Dependencies
 
-The project does not rely on external libraries. Please note that the project was developed and tested using Python 3.9. It may not be compatible with older versions of Python.
+The project has dependencies specified in the `requirements.txt` file. You can install them using the following command:
 
-## Contact
+```bash
+pip install -r requirements.txt
+```
+
+Please note that the project was developed and tested using Python 3.9. It may not be compatible with older versions of Python.
 
 This project was developed and is owned by Viktor Reif. If you have suggestions or inquiries, contact viktor.reif@gmail.com
