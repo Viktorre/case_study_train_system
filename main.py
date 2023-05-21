@@ -46,7 +46,9 @@ def compute_shortest_paths(
         empty.
     """
     if length_tolerance_factor < 1.0:
-        raise ValueError("length_tolerance_factor must be greater than or equal to 1.0.")
+        raise ValueError(
+            "length_tolerance_factor must be greater than or equal to 1.0."
+        )
 
     paths = [UndirectedPath([start])]
     arrived_paths = []
@@ -94,7 +96,7 @@ def remove_too_long_paths(
     """If at least one path arrived at the end point of the graph, the function
     removes all paths from the list of given paths that are longer than the
     shortest arrived path times the tolerance factor.
-    
+
     Args:
         paths: A list of UndirectedPath objects representing the paths to be
             evaluated and potentially removed.
@@ -114,7 +116,7 @@ def compute_length_tolerance(
 ) -> float:
     """If at least on path arrived at the end node, ie the list of arrived path
     is not empty, the length tolerance is computed by multiplying the shortest
-    arrived path length with the tolerance factor.    
+    arrived path length with the tolerance factor.
     Args:
         arrived_paths: A list of UndirectedPath objects representing the paths that
             have successfully arrived at the end node.
