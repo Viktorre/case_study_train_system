@@ -30,20 +30,20 @@ def compute_shortest_paths(
     directions including cyclic conncections. It saves all paths that successfully
     reach the end node. The modification is that the function stops extending paths
     that are too long given the tolerance to increase efficiency. The process of
-    extending paths is repeated until all path reach the length tolerance limit.
-    When the process is finished, the result is the list of arrived paths - ordered
-    by length - which will be returned.
+    extending paths is repeated until all paths reach the length tolerance limit.
+    When the process is finished, the result is the list of arrived paths ordered
+    by length, which is returned.
 
     Args:
-        graph (UndirectedGraph): The undirected graph in which the N shortest paths 
+        graph (UndirectedGraph): The undirected graph in which the N shortest paths
             shall be found.
         start (Node): The start node of the paths
         end (Node): The end node of the paths
-        length_tolerance_factor (float): The maximum length ratio which is allowed 
+        length_tolerance_factor (float): The maximum length ratio which is allowed
             for the discovered paths (minimum: 1.0, maximum: infinite)
 
     Returns:
-        (List[UndirectedPath]): The discovered paths. If no path from A to B exists, 
+        (List[UndirectedPath]): The discovered paths. If no path from A to B exists,
             the result list is empty.
     """
     if length_tolerance_factor < 1.0:
@@ -76,14 +76,14 @@ def identify_and_append_arrived_paths(
     checks for all possible paths if their current end point is the end point of
     the graph. If yes, then these paths are added to the list of arrived paths.
     Args:
-        paths (List[UndirectedPath]): A list of UndirectedPath objects representing 
+        paths (List[UndirectedPath]): A list of UndirectedPath objects representing
             the current paths.
-        arrived_paths (List[UndirectedPath]): A list of UndirectedPath objects 
+        arrived_paths (List[UndirectedPath]): A list of UndirectedPath objects
             representing the paths that have already arrived at the end node.
         end (node): The end node to compare against the end points of the paths.
 
     Returns:
-        (List[UndirectedPath]): A list of UndirectedPath objects containing the 
+        (List[UndirectedPath]): A list of UndirectedPath objects containing the
             former arrived paths as well as the added updated arrived paths.
     """
     new_arrived_paths = [path for path in paths if path.end == end]
@@ -100,13 +100,13 @@ def remove_too_long_paths(
     shortest arrived path times the tolerance factor.
 
     Args:
-        paths (List[UndirectedPath]): A list of UndirectedPath objects representing 
+        paths (List[UndirectedPath]): A list of UndirectedPath objects representing
             the paths to be evaluated and potentially removed.
-        length_tolerance (float): A float value representing the maximum allowed 
+        length_tolerance (float): A float value representing the maximum allowed
             length ratio compared to the shortest arrived path length.
 
-    Returns: 
-        (List[UndirectedPath]): A list of UndirectedPath objects containing the 
+    Returns:
+        (List[UndirectedPath]): A list of UndirectedPath objects containing the
             updated paths with any paths longer than the length tolerance removed.
     """
     updated_paths = [path for path in paths if path.length <= length_tolerance]
@@ -120,14 +120,14 @@ def compute_length_tolerance(
     is not empty, the length tolerance is computed by multiplying the shortest
     arrived path length with the tolerance factor.
     Args:
-        arrived_paths (List[UndirectedPath]): A list of UndirectedPath objects 
+        arrived_paths (List[UndirectedPath]): A list of UndirectedPath objects
             representing the paths that have successfully arrived at the end node.
-        length_tolerance_factor (float): A float value representing the tolerance 
+        length_tolerance_factor (float): A float value representing the tolerance
             factor to be applied to the shortest arrived path length.
 
-    Returns: 
-        (float): A float value representing the computed length tolerance. It is 
-            determined by multiplying the length of the shortest arrived path by 
+    Returns:
+        (float): A float value representing the computed length tolerance. It is
+            determined by multiplying the length of the shortest arrived path by
             the length tolerance factor.
     """
     length_tolerance = (
